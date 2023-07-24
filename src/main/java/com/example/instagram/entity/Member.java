@@ -25,8 +25,10 @@ public class Member {
     private String name;
 
     // 로그인 시에 받을 필요 없음. 프로필 수정 시에만 변경 또는 추가할 수 있도록 할 것
+    @Enumerated(EnumType.STRING)
+    private Gender gender;      // 성별
+
     private String content;     // 자기소개...?
-    private String gender;      // 성별
     private String profileImg;  // 프로필 이미지
 
 }
