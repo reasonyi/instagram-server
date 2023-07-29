@@ -2,7 +2,10 @@ package com.example.instagram.service;
 
 import com.example.instagram.dto.request.SignUpRequestDto;
 import com.example.instagram.entity.Member;
+import com.example.instagram.entity.MemberRole;
+import com.example.instagram.entity.Role;
 import com.example.instagram.repository.MemberRepository;
+import com.example.instagram.repository.MemberRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberRoleRepository memberRoleRepository;
 
     // 회원가입
     public String signUp(SignUpRequestDto signupRequestDto) {
@@ -29,6 +33,9 @@ public class MemberService {
                 .build();
 
         memberRepository.save(member);
+
+        MemberRole memberRole = new MemberRole(null, Role.MEMBER, member);
+        memberRoleRepository.save(memberRole);
 
         return "회원가입이 완료되었습니다.";
     }

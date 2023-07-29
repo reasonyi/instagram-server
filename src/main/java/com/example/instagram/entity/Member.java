@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,4 +33,7 @@ public class Member {
     private String content;     // 자기소개...?
     private String profileImg;  // 프로필 이미지
 
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinColumn(name="uid")
+    private List<MemberRole> roles = new ArrayList<>();
 }
