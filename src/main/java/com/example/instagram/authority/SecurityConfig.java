@@ -27,8 +27,9 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt를 사용하기 때문에 session은 사용하지 않는다.
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/member/signup").anonymous()  // 이 url을 호출하는 사람은 인증되지 않은 사용자여야 한다.
-                .anyRequest().permitAll()   // 그 외의 요청은 아무 권한 없이 모두가 요청 가능
+                .antMatchers("/api/user/signup", "/api/user/login").anonymous()  // 인증되지 않은 사용자가 요청할 수 있다.
+                .antMatchers("api/user/**").hasRole("MEMBER")
+                .anyRequest().authenticated()   // 인증이 된 사람만 요청 가능하다.
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);    //앞의 필터를 통과하면 뒤의 필터는 시행하지 않는다.
 

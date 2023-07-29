@@ -3,13 +3,11 @@ package com.example.instagram.controller;
 import com.example.instagram.authority.TokenInfo;
 import com.example.instagram.dto.request.LoginRequestDto;
 import com.example.instagram.dto.request.SignUpRequestDto;
+import com.example.instagram.dto.response.MemberResponseDto;
 import com.example.instagram.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,4 +28,8 @@ public class MemberController {
         return ResponseEntity.ok().body(memberService.login(loginRequestDto));
     }
 
+    @GetMapping(value = "/info/{loginId}")
+    public ResponseEntity<MemberResponseDto> searchMyInfo(@PathVariable String loginId) {
+        return ResponseEntity.ok().body(memberService.serchMyInfo(loginId));
+    }
 }

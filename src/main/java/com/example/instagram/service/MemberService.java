@@ -4,6 +4,7 @@ import com.example.instagram.authority.JwtTokenProvider;
 import com.example.instagram.authority.TokenInfo;
 import com.example.instagram.dto.request.LoginRequestDto;
 import com.example.instagram.dto.request.SignUpRequestDto;
+import com.example.instagram.dto.response.MemberResponseDto;
 import com.example.instagram.entity.Member;
 import com.example.instagram.entity.MemberRole;
 import com.example.instagram.entity.Role;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,5 +58,28 @@ public class MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         return jwtTokenProvider.createToken(authentication);    // 문제가 없을 시 토큰을 발행하여 사용자에게 전달
+    }
+
+    // 내 정보 조회
+    public MemberResponseDto serchMyInfo(String loginId) {
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 유저입니다."));
+
+        String gender;
+
+        if(member.getGender() == null)
+            gender = null;
+        else
+            gender = member.getGender().toString();
+
+
+        return MemberResponseDto.builder()
+                .loginId(member.getLoginId())
+                .nickname(member.getNickname())
+                .name(member.getName())
+                .gender(gender)
+                .content(member.getContent())
+                .profileImg(member.getProfileImg())
+                .build();
     }
 }

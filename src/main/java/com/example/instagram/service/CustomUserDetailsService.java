@@ -31,13 +31,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails createUserDetails(Member member) {
 
         List<SimpleGrantedAuthority> authorities = member.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole()))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole().name()))
                 .collect(Collectors.toList());
 
-        return User.builder()
-                .username(member.getLoginId())
-                .password(passwordEncoder.encode(member.getPassword()))
-                .authorities(authorities)
-                .build();
+        return new User(
+                member.getLoginId(),
+                passwordEncoder.encode(member.getPassword()),
+                authorities
+        );
     }
 }
