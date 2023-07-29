@@ -83,10 +83,15 @@ public class JwtTokenProvider {
             getClaims(token);
             return true;    // 문제가 없으면 true return
         }   // Exception이 있을 경우 각 Exception별로 처리함
-        catch (SecurityException | MalformedJwtException e) {}
-        catch (ExpiredJwtException e) {}
-        catch (UnsupportedJwtException e) {}
-        catch (IllegalArgumentException e) {}
+        catch (SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");
+        }
         return false;
     }
 
