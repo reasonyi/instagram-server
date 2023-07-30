@@ -2,6 +2,7 @@ package com.example.instagram.service;
 
 import com.example.instagram.authority.JwtTokenProvider;
 import com.example.instagram.authority.TokenInfo;
+import com.example.instagram.dto.request.InfoUpdateRequestDto;
 import com.example.instagram.dto.request.LoginRequestDto;
 import com.example.instagram.dto.request.SignUpRequestDto;
 import com.example.instagram.dto.response.MemberResponseDto;
@@ -72,6 +73,34 @@ public class MemberService {
         else
             gender = member.getGender().toString();
 
+
+        return MemberResponseDto.builder()
+                .loginId(member.getLoginId())
+                .nickname(member.getNickname())
+                .name(member.getName())
+                .gender(gender)
+                .content(member.getContent())
+                .profileImg(member.getProfileImg())
+                .build();
+    }
+
+    // 내 정보 수정
+    public MemberResponseDto updateMyInfo(InfoUpdateRequestDto infoUpdateRequestDto, String loginId) {
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 유저입니다."));
+
+        member.update(infoUpdateRequestDto.getNickname(),
+                infoUpdateRequestDto.getName(),
+                infoUpdateRequestDto.getGender(),
+                infoUpdateRequestDto.getContent(),
+                infoUpdateRequestDto.getProfileImg());
+
+        String gender;
+
+        if(member.getGender() == null)
+            gender = null;
+        else
+            gender = member.getGender().toString();
 
         return MemberResponseDto.builder()
                 .loginId(member.getLoginId())

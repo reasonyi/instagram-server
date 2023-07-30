@@ -35,4 +35,12 @@ public class Member {
 
     @OneToMany(fetch=FetchType.EAGER, mappedBy = "member")
     private List<MemberRole> roles = null;
+
+    public void update(String nickname, String name, Gender gender, String content, String profileImg) {
+        this.content = content;
+        this.gender = gender;
+        this.nickname = nickname;
+        this.name = name;
+        this.profileImg = profileImg;
+    }
 }
